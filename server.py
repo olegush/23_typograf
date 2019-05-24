@@ -1,4 +1,8 @@
+import os
+
+from dotenv import load_dotenv
 from flask import Flask, render_template, request
+
 from typograph import typograph
 
 
@@ -21,5 +25,6 @@ def form():
 
 
 if __name__ == "__main__":
-    app.debug = True
+    load_dotenv()
+    app.debug = os.getenv('DEBUG')
     app.run()
