@@ -5,25 +5,31 @@ def typograph(source):
 
     result = source.strip()
 
-    # dict of tuples with patterns and strings to replace
+    # dict of tuples with compiled expressions and strings to replace
     rules = OrderedDict({
-        'whitespaces': (r' {2,}', r' ', 0),
-        'newlines': (r'\s{3,}', r'\n\n', 0),
-        'mdash': (r' - ', r'&nbsp;&mdash; ', 0),
-        'short_words': (r'( [\D{1,2}])( )([\w+])', r'\1&nbsp;\3', 0),
-        'digits': (r'(\d+)( )(\w+)', r'\1&nbsp;\3', 0),
-        'phones': (r'(\d)(-)(\d)', r'\1&ndash;\3', 0),
-        'quotes': (r"""
-                    (?<!<)
-                    ["\'] # left quotes
-                    (.+?) # quoted text
-                    ["\'] # right quotes
-                    (?!>)
-                    """, r'&laquo;\1&raquo;', re.VERBOSE),
+        'whitespaces': (
+            re.compile(r' {2,}'), r' '),
+        'newlines': (
+            re.compile(r'\s{3,}'), r'\n\n'),
+        'mdash': (
+            re.compile(r' - '), r'&nbsp;&mdash; '),
+        'short_words': (
+            re.compile(r'( [\D{1,2}])( )([\w+])'), r'\1&nbsp;\3'),
+        'digits': (
+            re.compile(r'(\d+)( )(\w+)'), r'\1&nbsp;\3'),
+        'phones': (
+            re.compile(r'(\d)(-)(\d)'), r'\1&ndash;\3'),
+        'quotes': (
+            re.compile(r"""
+                        (?<!<)
+                        ["\'] # left quotes
+                        (.+?) # quoted text
+                        ["\'] # right quotes
+                        (?!>)
+                        """, re.VERBOSE), r'&laquo;\1&raquo;'),
         })
 
-    for pattern, string, flags in rules.values():
-        prog = re.compile(pattern, flags)
+    for prog, string in rules.values():
         result = prog.sub(string, result)
 
     return result
