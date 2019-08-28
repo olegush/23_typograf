@@ -1,4 +1,4 @@
-# Typograf Service
+# Typograph Service
 
 Th script runs Flask server and builds the form based on template. The form is a typograph service which prepares a text to publish for web.
 
